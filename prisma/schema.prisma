@@ -9,3 +9,148 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  ADMIN
+  USER
+  MODERATOR
+}
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  username      String? @unique
+  password      String
+  dateOfBirth DateTime
+  followedBy User[] @relation("UserFollows")
+  following User[] @relation("UserFollows")
+  avatar String?
+  role Role @default(USER)
+  postedPosts     Post[] @relation("PostedPosts")
+  moderatedPosts Post[] @relation("ModeratedPosts")
+  lists List[]
+  rates Rate[]
+  postComments PostComment[]
+  listComments ListComment[]
+  isReported Boolean @default(false)
+  token String?
+}
+
+model Post{
+ id Int @id @default(autoincrement())
+  filmTitle String
+  filmResume String @db.LongText
+  casting ActorsOnFilm[]
+  realisatorId Int?
+  realisator Realisator? @relation(fields: [realisatorId], references : [id])
+  producerId Int?
+  producer Producer? @relation(fields: [producerId], references : [id])
+  genres FilmGenres[]
+  budget Float?
+  poster String?
+  rates Rate[]
+  authorId Int
+  author User @relation(name: "PostedPosts",fields: [authorId], references : [id])
+  moderatorId Int?
+  moderator User? @relation(name: "ModeratedPosts",fields: [moderatorId], references : [id])
+  createdAt DateTime @default(now())
+  status String
+  critic String @db.LongText
+  isOpenToComment Boolean @default(true)
+  comments PostComment[]
+  lists FilmsInLists[]
+}
+
+model List {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(255)
+  films FilmsInLists[]
+  authorId Int
+  author User @relation(fields: [authorId], references : [id])
+  description String @db.LongText
+  public Boolean
+  comments ListComment[]
+}
+
+model FilmsInLists {
+  listId Int
+  list List @relation(fields: [listId], references : [id])
+  film Post @relation(fields: [filmId], references : [id])
+  filmId Int
+  @@id([listId, filmId])
+}
+
+model Actor {
+  id Int @id @default(autoincrement())
+  firstname String @db.VarChar(100)
+  lastname String @db.VarChar(100)
+  age Int
+  films ActorsOnFilm[]
+}
+
+model ActorsOnFilm {
+  actorId Int
+  actor Actor @relation(fields: [actorId], references : [id])
+  filmId Int
+  film Post @relation(fields: [filmId], references :[id])
+  @@id([actorId, filmId])
+}
+
+model Realisator {
+  id Int @id @default(autoincrement())
+  firstname String
+  lastname String
+  films Post[]
+}
+
+model Producer {
+  id Int @id @default(autoincrement())
+  firstname String?
+  lastname String?
+  societyname String
+  films Post[]
+}
+
+model Genre {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  films FilmGenres[]
+}
+
+model FilmGenres {
+  post Post @relation(fields:[filmId], references : [id])
+  filmId Int
+  genre Genre @relation(fields:[genreId], references : [id])
+  genreId Int
+  @@id([filmId, genreId])
+}
+
+model Rate{
+  id Int @id @default(autoincrement())
+  rate Int
+  issuer User @relation(fields:[issuerId], references : [id])
+  issuerId Int 
+  film Post @relation(fields: [filmId], references : [id])
+  filmId Int
+  @@unique([filmId, issuerId])
+}
+
+model PostComment{
+  id Int @id @default(autoincrement())
+  author User @relation(fields: [authorId], references : [id])
+  authorId Int
+  post Post @relation(fields: [postId], references : [id])
+  postId Int
+  text String @db.LongText
+  createdAt DateTime @default(now())
+}
+
+model ListComment {
+  id Int @id @default(autoincrement())
+  author User @relation(fields: [authorId], references : [id])
+  authorId Int
+  listId Int
+  list List @relation(fields: [listId], references :[id])
+  createdAt DateTime @default(now())
+}
