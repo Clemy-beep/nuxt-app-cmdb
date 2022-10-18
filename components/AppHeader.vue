@@ -7,12 +7,16 @@
       </h1>
     </div>
     <nav>
-      <nuxt-link to="/" id="login-text">Sign in</nuxt-link>
-      <nuxt-link to="/" id="small-screen-login"
+      <nuxt-link @click="$emit('showSignIn')" id="login-text"
+        >Sign in</nuxt-link
+      >
+      <nuxt-link @click="$emit('showSignIn')" id="small-screen-login"
         ><span class="material-icons"> login </span>
       </nuxt-link>
-      <nuxt-link to="/" id="register-text">Sign up</nuxt-link>
-      <nuxt-link to="/" id="small-screen-register"
+      <nuxt-link @click="$emit('showSignUp')" id="register-text"
+        >Sign up</nuxt-link
+      >
+      <nuxt-link @click="$emit('showSignUp')" id="small-screen-register"
         ><span class="material-icons-outlined"> person_add </span></nuxt-link
       >
     </nav>
@@ -33,6 +37,7 @@ header {
   display: flex;
   justify-content: space-between;
   margin: -8px;
+  padding: 0 64px;
 }
 #logo,
 nav {
@@ -50,6 +55,7 @@ nav a {
   text-decoration: none;
   font-size: 20px;
   font-weight: normal;
+  cursor: pointer;
 }
 h1 a {
   text-decoration: none;
@@ -70,7 +76,6 @@ nav {
 img {
   width: 64px;
   height: 64px;
-  margin-left: 1em;
   margin-bottom: 10px;
 }
 nav a.router-link-exact-active {

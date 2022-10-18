@@ -1,0 +1,6 @@
+body{
+    display: grid;
+    min-height: calc(100vh - 3px);
+    grid-template-rows: auto 1fr auto;
+    align-items: center;
+}
