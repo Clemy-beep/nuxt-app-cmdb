@@ -35,7 +35,7 @@ footer {
   text-align: right;
   overflow-x: clip;
   overflow-y: clip;
-  width: 100vw;
+  width: 99.5vw;
   margin-top: 3em;
 }
 @media (max-width: 650px) {
