@@ -32,11 +32,14 @@
   display: none;
 }
 header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 84px;
   background-color: #9461ff;
   display: flex;
   justify-content: space-between;
-  margin: -8px;
   padding: 0 64px;
 }
 #logo,
