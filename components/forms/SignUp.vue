@@ -8,6 +8,8 @@
       v-model="email"
       required
       placeholder="Ex: example@example.com"
+      :class="{ invalid: hasError }"
+      @change="hasError = false"
     />
     <label for="username">Username</label>
     <input
@@ -34,28 +36,56 @@
       placeholder="Your password goes here"
     />
     <label for="user-type">User type</label>
-    <select name="user-type" id="user-type">
+    <select name="user-type" id="user-type" v-model="role">
       <option value="USER">User</option>
       <option value="MODERATOR">Moderator</option>
     </select>
     <div class="button">
-      <PrimaryButton :text="'Sign up'" @click="signUp" />
+      <ButtonsPrimaryButton :text="'Sign up'" @click="signUp" />
     </div>
+    <ConfirmDialog
+      @handleSubmit="handleSubmit"
+      @closeModal="showDialog = false"
+      :title="title"
+      :message="message"
+      :showModal="showDialog"
+    />
   </div>
 </template>
 
 <script setup>
-import PrimaryButton from "@/components/buttons/PrimaryButton.vue";
 const email = ref("");
 const password = ref("");
 const username = ref("");
 const dateOfBirth = ref(new Date(""));
+const role = ref("USER");
+const title = ref("Moderator account creation");
+const hasError = ref(false);
+const message = ref(
+  "You are about to create a moderator account. It means you want to decide wether posts you see should be visible or not to other users. Such a role isn’t to be taken lightly and, if you abuse your power, you might be definitively banned from this website. If not already done, please read our Moderation rules. By clicking on “Confirm, you accept ToU and confirm having read our Moderation rules."
+);
+const showDialog = ref(false);
+
 const signUp = () => {
-  console.log(email.value, password.value, dateOfBirth.value, username.value);
+  console.log("sign up fun lauched");
+  if (role.value === "MODERATOR") {
+    showDialog.value = true;
+    return;
+  }
+  handleSubmit();
+};
+
+const handleSubmit = () => {
+  showDialog.value = false;
+  hasError.value = true;
+  console.log("Account created");
 };
 </script>
 
 <style scoped>
+.invalid {
+  border: 1px solid red;
+}
 .material-symbols-outlined {
   font-size: 30px;
   color: #9461ff;

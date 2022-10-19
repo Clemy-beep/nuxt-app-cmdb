@@ -12,7 +12,7 @@ const showSignIn = () => {
 };
 </script>
 <template>
-  <div>
+  <div class="body">
     <img src="@/assets/img/home_background.png" alt="" />
     <AppHeader @showSignUp="showSignUp" @showSignIn="showSignIn" />
     <h1>Welcome to CMDB !</h1>
@@ -43,12 +43,19 @@ const showSignIn = () => {
 </template>
 
 <style scoped>
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 100vh;
+}
 img {
   position: absolute;
   top: 0;
   width: 99.5vw;
   height: 35vh;
-  object-fit: cover;
+  object-fit: fill;
   z-index: -1;
 }
 
@@ -62,7 +69,6 @@ h1 {
 }
 
 .presentation {
-  background-color: white;
   width: 30vw;
 }
 
